@@ -41,6 +41,7 @@ function clearDisplay() {
     value1 = 0;
     value2 = 0;
     display.appendChild(displayNumber);
+    decimal.disabled = false;
 }
 
 let operations = document.querySelectorAll('.operations');
@@ -48,15 +49,57 @@ operations.forEach(operation => {
     operation.addEventListener('click', showOperator);
 });
 
+let decimal = document.getElementById('decimal');
+decimal.addEventListener('click', addDecimal);
+
+function addDecimal() {
+    display.appendChild(document.createTextNode('.'));
+    if (dValues.includes('.')) {
+        decimal.disabled = true;
+    }
+}
+
 function showOperator() {
     if (this.id === 'add') {
         display.appendChild(document.createTextNode('+'));
+        if (dValues.includes('+') ||
+            dValues.includes('-') ||
+            dValues.includes('*') ||
+            dValues.includes('/')) {
+                operate();
+                decimal.disabled = false;
+                display.appendChild(document.createTextNode('+'));
+        }
     } else if (this.id === 'subtract') {
         display.appendChild(document.createTextNode('-'));
+        if (dValues.includes('+') ||
+            dValues.includes('-') ||
+            dValues.includes('*') ||
+            dValues.includes('/')) {
+                operate();
+                decimal.disabled = false;
+                display.appendChild(document.createTextNode('-'));
+        }
     } else if (this.id === 'multiply') {
         display.appendChild(document.createTextNode('*'));
+        if (dValues.includes('+') ||
+            dValues.includes('-') ||
+            dValues.includes('*') ||
+            dValues.includes('/')) {
+                operate();
+                decimal.disabled = false;
+                display.appendChild(document.createTextNode('*'));
+        }
     } else if (this.id === 'divide') {
         display.appendChild(document.createTextNode('/'));
+        if (dValues.includes('+') ||
+            dValues.includes('-') ||
+            dValues.includes('*') ||
+            dValues.includes('/')) {
+                operate();
+                decimal.disabled = false;
+                display.appendChild(document.createTextNode('/'));
+        }
     }
 }
 
@@ -81,7 +124,8 @@ function operate(operation, value1, value2) {
             value2 = values[1];
             result = add(+value1, +value2);
             display.innerText = '';
-            display.appendChild(document.createTextNode(result));
+            display.appendChild(document.createTextNode(parseFloat(result.toFixed(5))));
+            decimal.disabled = false;
             break;
         case 'subtract':
             values = dValues.split('-');
@@ -89,7 +133,8 @@ function operate(operation, value1, value2) {
             value2 = values[1];
             result = subtract(+value1, +value2);
             display.innerText = '';
-            display.appendChild(document.createTextNode(result));
+            display.appendChild(document.createTextNode(parseFloat(result.toFixed(5))));
+            decimal.disabled = false;
             break;
         case 'multiply':
             values = dValues.split('*');
@@ -97,7 +142,8 @@ function operate(operation, value1, value2) {
             value2 = values[1];
             result = multiply(+value1, +value2);
             display.innerText = '';
-            display.appendChild(document.createTextNode(result));
+            display.appendChild(document.createTextNode(parseFloat(result.toFixed(5))));
+            decimal.disabled = false;
             break;
         case 'divide':
             values = dValues.split('/');
@@ -106,10 +152,12 @@ function operate(operation, value1, value2) {
             if (+value2 === 0) {
                 display.innerText = '';
                 display.appendChild(document.createTextNode('nope'));
+                decimal.disabled = false;
             } else {
                 result = divide(+value1, +value2);
                 display.innerText = '';
-                display.appendChild(document.createTextNode(result));
+                display.appendChild(document.createTextNode(parseFloat(result.toFixed(5))));
+                decimal.disabled = false;
             }    
     }
 }

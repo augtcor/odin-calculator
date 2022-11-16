@@ -1,6 +1,9 @@
 let displayValue = 0;
-let value = 0;
-let operation;
+let values;
+let value1 = 0;
+let value2 = 0;
+let result;
+let dValues;
 
 let display = document.getElementById('display');
 let displayNumber = document.createTextNode(displayValue);
@@ -17,12 +20,14 @@ function showNumbers() {
         displayValue = this.id;
         displayNumber = document.createTextNode(displayValue);
         display.appendChild(displayNumber);
-        value += displayValue;
+        value1 += displayValue;
+        dValues = display.innerText;
     } else {
         displayValue = this.id;
         displayNumber = document.createTextNode(displayValue);
         display.appendChild(displayNumber);
-        value += displayValue;
+        value1 += displayValue;
+        dValues = display.innerText;
     }    
 }
 
@@ -33,19 +38,79 @@ function clearDisplay() {
     display.innerText = '';
     displayNumber.nodeValue = 0;
     displayValue = 0;
-    value = 0;
+    value1 = 0;
+    value2 = 0;
     display.appendChild(displayNumber);
 }
 
-function operate() {
-    if (operation === "+") {
-        add();
-    } else if (operation === "-") {
-        subtract();
-    } else if (operation === "*") {
-        multiply();
-    } else if (operation === "/") {
-        divide();
+let operations = document.querySelectorAll('.operations');
+operations.forEach(operation => {
+    operation.addEventListener('click', showOperator);
+});
+
+function showOperator() {
+    if (this.id === 'add') {
+        display.appendChild(document.createTextNode('+'));
+    } else if (this.id === 'subtract') {
+        display.appendChild(document.createTextNode('-'));
+    } else if (this.id === 'multiply') {
+        display.appendChild(document.createTextNode('*'));
+    } else if (this.id === 'divide') {
+        display.appendChild(document.createTextNode('/'));
+    }
+}
+
+let equal = document.getElementById('equal');
+equal.addEventListener('click', operate);
+
+function operate(operation, value1, value2) {
+    if (dValues.includes('+')) {
+        operation = 'add';
+    } else if (dValues.includes('-')) {
+        operation = 'subtract';
+    } else if (dValues.includes('*')) {
+        operation = 'multiply';
+    } else if (dValues.includes('/')) {
+        operation = 'divide';
+    }
+
+    switch (operation) {
+        case 'add':
+            values = dValues.split('+');
+            value1 = values[0];
+            value2 = values[1];
+            result = add(+value1, +value2);
+            display.innerText = '';
+            display.appendChild(document.createTextNode(result));
+            break;
+        case 'subtract':
+            values = dValues.split('-');
+            value1 = values[0];
+            value2 = values[1];
+            result = subtract(+value1, +value2);
+            display.innerText = '';
+            display.appendChild(document.createTextNode(result));
+            break;
+        case 'multiply':
+            values = dValues.split('*');
+            value1 = values[0];
+            value2 = values[1];
+            result = multiply(+value1, +value2);
+            display.innerText = '';
+            display.appendChild(document.createTextNode(result));
+            break;
+        case 'divide':
+            values = dValues.split('/');
+            value1 = values[0];
+            value2 = values[1];
+            if (+value2 === 0) {
+                display.innerText = '';
+                display.appendChild(document.createTextNode('nope'));
+            } else {
+                result = divide(+value1, +value2);
+                display.innerText = '';
+                display.appendChild(document.createTextNode(result));
+            }    
     }
 }
 

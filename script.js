@@ -20,13 +20,11 @@ function showNumbers() {
         displayValue = this.id;
         displayNumber = document.createTextNode(displayValue);
         display.appendChild(displayNumber);
-        value1 += displayValue;
         dValues = display.innerText;
     } else {
         displayValue = this.id;
         displayNumber = document.createTextNode(displayValue);
         display.appendChild(displayNumber);
-        value1 += displayValue;
         dValues = display.innerText;
     }    
 }
@@ -55,6 +53,15 @@ function deleteChar() {
         displayValue = 0;
         display.appendChild(displayNumber);        
     }
+}
+
+let sign = document.getElementById('sign');
+sign.addEventListener('click', changeSign);
+
+function changeSign() {
+    value1 = -value1;
+    console.log(value1);
+    //display.insertBefore(dValues);
 }
 
 let operations = document.querySelectorAll('.operations');

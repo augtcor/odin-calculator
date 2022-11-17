@@ -44,6 +44,19 @@ function clearDisplay() {
     decimal.disabled = false;
 }
 
+let del = document.getElementById('delete');
+del.addEventListener('click', deleteChar);
+
+function deleteChar() {
+    display.removeChild(display.lastChild);
+    if (display.textContent === '') {
+        displayNumber = document.createTextNode(displayValue);
+        displayNumber.nodeValue = 0;
+        displayValue = 0;
+        display.appendChild(displayNumber);        
+    }
+}
+
 let operations = document.querySelectorAll('.operations');
 operations.forEach(operation => {
     operation.addEventListener('click', showOperator);

@@ -55,15 +55,6 @@ function deleteChar() {
     }
 }
 
-let sign = document.getElementById('sign');
-sign.addEventListener('click', changeSign);
-
-function changeSign() {
-    value1 = -value1;
-    console.log(value1);
-    //display.insertBefore(dValues);
-}
-
 let operations = document.querySelectorAll('.operations');
 operations.forEach(operation => {
     operation.addEventListener('click', showOperator);
@@ -73,10 +64,12 @@ let decimal = document.getElementById('decimal');
 decimal.addEventListener('click', addDecimal);
 
 function addDecimal() {
-    display.appendChild(document.createTextNode('.'));
     if (dValues.includes('.')) {
         decimal.disabled = true;
     }
+    let point = document.createTextNode('.');
+    display.appendChild(point);
+    dValues = display.innerText;
 }
 
 function showOperator() {
@@ -84,8 +77,8 @@ function showOperator() {
         display.appendChild(document.createTextNode('+'));
         if (dValues.includes('+') ||
             dValues.includes('-') ||
-            dValues.includes('*') ||
-            dValues.includes('/')) {
+            dValues.includes('\u{000D7}') ||
+            dValues.includes('\u{000F7}')) {
                 operate();
                 decimal.disabled = false;
                 display.appendChild(document.createTextNode('+'));
@@ -94,31 +87,31 @@ function showOperator() {
         display.appendChild(document.createTextNode('-'));
         if (dValues.includes('+') ||
             dValues.includes('-') ||
-            dValues.includes('*') ||
-            dValues.includes('/')) {
+            dValues.includes('\u{000D7}') ||
+            dValues.includes('\u{000F7}')) {
                 operate();
                 decimal.disabled = false;
                 display.appendChild(document.createTextNode('-'));
         }
     } else if (this.id === 'multiply') {
-        display.appendChild(document.createTextNode('*'));
+        display.appendChild(document.createTextNode('\u{000D7}'));
         if (dValues.includes('+') ||
             dValues.includes('-') ||
-            dValues.includes('*') ||
-            dValues.includes('/')) {
+            dValues.includes('\u{000D7}') ||
+            dValues.includes('\u{000F7}')) {
                 operate();
                 decimal.disabled = false;
-                display.appendChild(document.createTextNode('*'));
+                display.appendChild(document.createTextNode('\u{000D7}'));
         }
     } else if (this.id === 'divide') {
-        display.appendChild(document.createTextNode('/'));
+        display.appendChild(document.createTextNode('\u{000F7}'));
         if (dValues.includes('+') ||
             dValues.includes('-') ||
-            dValues.includes('*') ||
-            dValues.includes('/')) {
+            dValues.includes('\u{000D7}') ||
+            dValues.includes('\u{000F7}')) {
                 operate();
                 decimal.disabled = false;
-                display.appendChild(document.createTextNode('/'));
+                display.appendChild(document.createTextNode('\u{000F7}'));
         }
     }
 }
@@ -131,9 +124,9 @@ function operate(operation, value1, value2) {
         operation = 'add';
     } else if (dValues.includes('-')) {
         operation = 'subtract';
-    } else if (dValues.includes('*')) {
+    } else if (dValues.includes('\u{000D7}')) {
         operation = 'multiply';
-    } else if (dValues.includes('/')) {
+    } else if (dValues.includes('\u{000F7}')) {
         operation = 'divide';
     }
 
@@ -157,7 +150,7 @@ function operate(operation, value1, value2) {
             decimal.disabled = false;
             break;
         case 'multiply':
-            values = dValues.split('*');
+            values = dValues.split('\u{000D7}');
             value1 = values[0];
             value2 = values[1];
             result = multiply(+value1, +value2);
@@ -166,7 +159,7 @@ function operate(operation, value1, value2) {
             decimal.disabled = false;
             break;
         case 'divide':
-            values = dValues.split('/');
+            values = dValues.split('\u{000F7}');
             value1 = values[0];
             value2 = values[1];
             if (+value2 === 0) {
